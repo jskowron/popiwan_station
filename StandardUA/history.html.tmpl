@@ -1,0 +1,349 @@
+#encoding UTF-8
+#errorCatcher Echo
+##
+## Specifying an encoding of UTF-8 is usually safe, but if your text is
+## actually in Latin-1, then you should replace the string "UTF-8" with "latin-1"
+## If you do this, you should also change the 'Content-Type' metadata below.
+##
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head profile="http://www.w3.org/2005/10/profile">
+    ## This choice should match the #encoding directive above
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>$station.location Current Weather Conditions</title>
+    <link rel="stylesheet" type="text/css" href="weewx.css"/>
+    <link rel="icon" type="image/png" href="favicon.ico" />
+    <script type="text/javascript">
+      function openURL(urlname)
+      {
+        window.location=urlname;
+      }
+      function openNoaaFile(date)
+      {
+        var url = "NOAA/NOAA-";
+        url = url + date;
+        url = url + ".txt";
+        window.location=url;
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="container">
+
+      #include "header.inc"
+
+      <div id="stats_group">
+
+        <div class="stats">
+          <div class="stats_header">
+            Поточнi Дані
+          </div>
+
+          <table>
+            <tbody>
+              <tr>
+                <td class="stats_label">Зовнішня Температура</td>
+                <td class="stats_data">$current.outTemp</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Температура Вітру</td>
+                <td class="stats_data">$current.windchill</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Тепловий індекс</td>
+                <td class="stats_data">$current.heatindex</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Точка Роси</td>
+                <td class="stats_data">$current.dewpoint</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Вологість</td>
+                <td class="stats_data">$current.outHumidity</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Тиск</td>
+                <td class="stats_data">$current.barometer</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Зміна Тиску ($trend.time_delta.hour.format("%.0f"))</td>
+                <td class="stats_data">$trend.barometer</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Вітер</td>
+                <td class="stats_data">$current.windSpeed до $current.windDir ($current.windDir.ordinal_compass)</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Кількість Опадів</td>
+                <td class="stats_data">$current.rainRate</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Внутрішня Температура</td>
+                <td class="stats_data">$current.inTemp</td>
+              </tr>
+              #if $day.UV.has_data
+              <tr>
+                <td class="stats_label">УФ-Індекс</td>
+                <td class="stats_data">$current.UV</td>
+              </tr>
+              #end if
+              #if $day.ET.has_data and $day.ET.sum.raw > 0.0
+              <tr>
+                <td class="stats_label">ET</td>
+                <td class="stats_data">$current.ET</td>
+              </tr>
+              #end if
+              #if $day.radiation.has_data
+              <tr>
+                <td class="stats_label">Сонячне Випромінювання</td>
+                <td class="stats_data">$current.radiation</td>
+              </tr>
+              #end if
+            </tbody>
+          </table>
+        </div>
+
+        <p>&nbsp;</p>
+
+        <div class="stats">
+          <div class="stats_header">
+            Протягом Доби
+          </div>
+          <table>
+            <tbody>
+              <tr>
+                <td class="stats_label">
+                  Найвижча Температура<br/>
+                  Найнижча Температура
+                </td>
+                <td class="stats_data">
+                  $day.outTemp.max від $day.outTemp.maxtime<br/>
+                  $day.outTemp.min від $day.outTemp.mintime
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                  Найвижчий Тепловий Індекс<br/>
+                  Найнижчий Температура Вітра
+
+                </td>
+                <td class="stats_data">
+                  $day.heatindex.max від $day.heatindex.maxtime<br/>
+                  $day.windchill.min від $day.windchill.mintime
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                  Найвижча Вологість<br/>
+                  Найнижча Вологість
+                </td>
+                <td class="stats_data">
+                  $day.outHumidity.max від $day.outHumidity.maxtime<br/>
+                  $day.outHumidity.min від $day.outHumidity.mintime
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                  Найвижча Точка Роси<br/>
+                  Найнижча Точка Роси
+                </td>
+                <td class="stats_data">
+                  $day.dewpoint.max від $day.dewpoint.maxtime<br/>
+                  $day.dewpoint.min від $day.dewpoint.mintime
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                  Найвижчий Тиск<br/>
+                  Найнижчий Тиск
+                </td>
+                <td class="stats_data">
+                  $day.barometer.max від $day.barometer.maxtime<br/>
+                  $day.barometer.min від $day.barometer.mintime
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">Сьогоднішні Опади</td>
+                <td class="stats_data">$day.rain.sum</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Найвижча Кількість Опадів</td>
+                <td class="stats_data">$day.rainRate.max від $day.rainRate.maxtime</td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                  Найвижчий Вітер
+                </td>
+                <td class="stats_data">
+                  $day.wind.max до $day.wind.gustdir від $day.wind.maxtime
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                  Середній Вітер
+                </td>
+                <td class="stats_data">
+                  $day.wind.avg
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                  RMS Вітер
+                </td>
+                <td class="stats_data">
+                  $day.wind.rms
+                </td>
+              </tr>
+
+              <tr>
+                <td class="stats_label">
+                  Середній Напрям Швиидкості<br/>
+                  Середній Вектор Напряму
+                </td>
+                <td class="stats_data">
+                  $day.wind.vecavg<br/>
+                  $day.wind.vecdir
+                </td>
+              </tr>
+
+              <tr>
+                <td class="stats_label">
+                  Найвижча Внутрішня Температура<br/>
+                  Найнижча Внутрішня Температура
+                </td>
+                <td class="stats_data">
+                  $day.inTemp.max від $day.inTemp.maxtime<br/>
+                  $day.inTemp.min від $day.inTemp.mintime
+                </td>
+              </tr>
+              #if $day.UV.has_data
+              <tr>
+                <td class="stats_label">
+                  Найвижчий УФ-Індекс<br/>
+                  Найнижчий УФ-Індекс
+                </td>
+                <td class="stats_data">
+                  $day.UV.max від $day.UV.maxtime<br/>
+                  $day.UV.min від $day.UV.mintime
+                </td>
+              </tr>
+              #end if
+              #if $day.ET.has_data and $day.ET.sum.raw >0.0
+              <tr>
+                <td class="stats_label">
+                  Найвижчий ET<br/>
+                  Найнижчий ET
+                </td>
+                <td class="stats_data">
+                  $day.ET.max від $day.ET.maxtime<br/>
+                  $day.ET.min від $day.ET.mintime
+                </td>
+              </tr>
+              #end if
+              #if $day.radiation.has_data
+              <tr>
+                <td class="stats_label">
+                  Найвижче Випромінювання<br/>
+                  Найнижче Випромінювання
+                </td>
+                <td class="stats_data">
+                  $day.radiation.max від $day.radiation.maxtime<br/>
+                  $day.radiation.min від $day.radiation.mintime
+                </td>
+              </tr>
+              #end if
+            </tbody>
+          </table>
+        </div> <!--End class "stats" -->
+
+        <p>&nbsp;</p>
+
+        #if $Extras.has_key('radar_img')
+        <div id="radar_img">
+          #if $Extras.has_key('radar_url')
+          <a  href="$Extras.radar_url">
+          #end if
+            <img src="$Extras.radar_img" alt="Radar" />
+          #if $Extras.has_key('radar_url')
+          </a>
+          <p>Click image for expanded radar loop</p>
+          #end if
+        </div>
+        #end if
+
+      </div> <!--End class "stats_group" -->
+
+      <div id="content">
+
+        <div class="header">
+          <h3>Сьогоднішня Статистика і Графіки</h3>
+        </div>
+
+
+        <div id="plots">
+          <img src="daytempdew.png"   alt="temperatures" />
+          <img src="daytempchill.png" alt="heatchill" />
+          <img src="dayhumidity.png"  alt="outside humidity" />
+          <img src="dayrain.png"      alt="rain" />
+          <img src="daywind.png"      alt="wind" />
+          <img src="daybarometer.png" alt="barometer"/>
+          <img src="daywinddir.png"   alt="Hi Wind" />
+          <img src="dayinside.png"    alt="Inside" />
+          <img src="daywindvec.png"   alt="Wind Vector" />
+          #if $day.radiation.has_data
+          <img src="dayradiation.png" alt="Radiation" />
+          #end if
+          #if $day.UV.has_data
+          <img src="dayuv.png" alt="UV Index" />
+          #end if
+          #if $day.rxCheckPercent.has_data
+          <img src="dayrx.png"        alt="day rx percent"/>
+          #end if
+        </div> <!-- End id "plots" -->
+      </div> <!-- End id "content" -->
+
+      <div id="navbar">
+        <input type="button" value="   Тепер   " onclick="openURL('history.html')" />
+        <input type="button" value="   Тиждень   " onclick="openURL('week.html')" />
+        <input type="button" value="   Місяць    " onclick="openURL('month.html')" />
+        <input type="button" value="    Рік      " onclick="openURL('year.html')" />
+        <p>Підсумки за Місяць-:&nbsp;
+        <select NAME=noaaselect onchange="openNoaaFile(value)">
+        #for $monthYear in $SummaryByMonth
+            <option value="$monthYear">$monthYear</option>
+        #end for
+	    <option selected>-Вибрати Місяць-</option>
+        </select>
+        <br/>
+        Підсумки за Рік:&nbsp;
+        <select NAME=noaaselect onchange="openNoaaFile(value)">
+        #for $yr in $SummaryByYear
+            <option value="$yr">$yr</option>
+        #end for
+	    <option selected>-Вибрати рік-</option>
+        </select>
+        </p>
+      </div>
+
+#include "foo.inc"
+
+    </div>
+
+    ## Include the Google Analytics code if the user has supplied an ID:
+    #if $Extras.has_key('googleAnalyticsId')
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try{
+            var pageTracker = _gat._getTracker("$Extras.googleAnalyticsId");
+            pageTracker._trackPageview();
+        } catch(err) {}
+    </script>
+    #end if
+
+</body>
+
+</html>

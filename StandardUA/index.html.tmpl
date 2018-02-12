@@ -1,0 +1,218 @@
+#encoding UTF-8
+#errorCatcher Echo
+##
+## Specifying an encoding of UTF-8 is usually safe, but if your text is
+## actually in Latin-1, then you should replace the string "UTF-8" with "latin-1"
+## If you do this, you should also change the 'Content-Type' metadata below.
+
+##
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head profile="http://www.w3.org/2005/10/profile">
+    ## This choice should match the #encoding directive above
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>$station.location Current Weather Conditions</title>
+    <link rel="stylesheet" type="text/css" href="weewx.css"/>
+    <link rel="icon" type="image/png" href="favicon.ico" />
+    <script type="text/javascript">
+      function openURL(urlname)
+      {
+        window.location=urlname;
+      }
+      function openNoaaFile(date)
+      {
+        var url = "NOAA/NOAA-";
+        url = url + date;
+        url = url + ".txt";
+        window.location=url;
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="container">
+
+#include "header.inc"
+
+      <div id="stats_group">
+
+        <div class="stats">
+          <div class="stats_header">
+            Поточні Дані
+          </div>
+
+          <table>
+            <tbody>
+              <tr>
+                <td class="stats_label">Зовнішня Температура</td>
+                <td class="stats_data">$current.outTemp</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Температура Вітру</td>
+                <td class="stats_data">$current.windchill</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Тепловий індекс</td>
+                <td class="stats_data">$current.heatindex</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Точка Роси</td>
+                <td class="stats_data">$current.dewpoint</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Вологість</td>
+                <td class="stats_data">$current.outHumidity</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Тиск</td>
+                <td class="stats_data">$current.barometer</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Зміна Тиску ($trend.time_delta.hour.format("%.0f"))</td>
+                <td class="stats_data">$trend.barometer</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Вітер</td>
+                <td class="stats_data">$current.windSpeed from $current.windDir ($current.windDir.ordinal_compass)</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Кількість Опадів</td>
+                <td class="stats_data">$current.rainRate</td>
+              </tr>
+              <tr>
+                <td class="stats_label">Внутрішня Температура</td>
+                <td class="stats_data">$current.inTemp</td>
+              </tr>
+              #if $day.UV.has_data
+              <tr>
+                <td class="stats_label">УФ-Індекс</td>
+                <td class="stats_data">$current.UV</td>
+              </tr>
+              #end if
+              #if $day.ET.has_data and $day.ET.sum.raw > 0.0
+              <tr>
+                <td class="stats_label">ET</td>
+                <td class="stats_data">$current.ET</td>
+              </tr>
+              #end if
+              #if $day.radiation.has_data
+              <tr>
+                <td class="stats_label">Сонячне Випромінювання</td>
+                <td class="stats_data">$current.radiation</td>
+              </tr>
+              #end if
+            </tbody>
+          </table>
+
+        </div>
+        <p>&nbsp;</p>
+<!--radar-->
+        #if $Extras.has_key('radar_img')
+        <div id="radar_img">
+          #if $Extras.has_key('radar_url')
+          <a  href="$Extras.radar_url">
+          #end if
+            <img src="$Extras.radar_img" alt="Radar" />
+          #if $Extras.has_key('radar_url')
+          </a>
+          <p>Натисніть на картинку для відкриття радара</p>
+          #end if
+        </div>
+        #end if
+<!--radar-->
+       <p>&nbsp;</p>
+      </div> <!--End class "stats_group" -->
+
+
+
+
+        <div id="content">
+          <div id="haedr2">
+        <div id="about">
+          <div class="header">
+            Інформація про станцію:
+          </div>
+          <table>
+            <caption class="caption">Положення</caption>
+            <tr>
+              <td class="label">Широта:</td>
+              <td class="data">$station.latitude[0]&deg; $station.latitude[1]' $station.latitude[2]</td>
+            </tr>
+            <tr>
+              <td class="label">Довгота:</td>
+              <td class="data">$station.longitude[0]&deg; $station.longitude[1]' $station.longitude[2]</td>
+            </tr>
+            <tr>
+              <td class="label">Висота:</td>
+              <td class="data">$station.altitude</td>
+            </tr>
+          </table>
+
+        </div> <!-- End id "about" -->
+      </div>
+
+
+     <div id="haedr2">
+        <div id="almanac">
+          <div class="header">
+            Сьогоднішний Альманах
+          </div>
+          <div class="celestial_group">
+
+            <table>
+              <tr>
+                <td class="label">Схід Сонця:</td>
+                <td class="data">$almanac.sunrise</td>
+              </tr>
+              <tr>
+                <td class="label">Захід Сонця:</td>
+                <td class="data">$almanac.sunset</td>
+              </tr>
+              <tr>
+                <td class="label">Фаза Місяця:</td>
+                <td class="data">$almanac.moon_phase<br/>($almanac.moon_fullness% full)</td>
+              </tr>
+            </table>
+
+          </div> <!-- end class "celestial_group" -->
+        </div> <!-- end id "almanac" -->
+      </div>
+
+
+<p>&nbsp;</p>
+      <div class="header">
+        <h3>Сьогоднішня Статистика   </h3>  <h3>і Графіки</h3>
+      </div>
+<p>&nbsp;</p>
+
+        <div id="plots">
+          <img src="daytempdew.png"   alt="temperatures" />
+          <img src="daytempchill.png" alt="heatchill" />
+          <img src="dayhumidity.png"  alt="outside humidity" />
+          <img src="dayrain.png"      alt="rain" />
+          <p>&nbsp;</p>
+        </div> <!-- End id "plots" -->
+
+      </div> <!-- End id "content" -->
+
+ #include "foo.inc"
+
+    </div>
+
+    ## Include the Google Analytics code if the user has supplied an ID:
+    #if $Extras.has_key('googleAnalyticsId')
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try{
+            var pageTracker = _gat._getTracker("$Extras.googleAnalyticsId");
+            pageTracker._trackPageview();
+        } catch(err) {}
+    </script>
+    #end if
+
+</body>
+
+</html>

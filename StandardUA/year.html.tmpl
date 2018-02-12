@@ -1,0 +1,280 @@
+#encoding UTF-8
+#errorCatcher Echo
+##
+## Specifying an encoding of UTF-8 is usually safe, but if your text is
+## actually in Latin-1, then you should replace the string "UTF-8" with "latin-1"
+## If you do this, you should also change the 'Content-Type' metadata below.
+##
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head profile="http://www.w3.org/2005/10/profile">
+    ## This choice should match the #encoding directive above
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>$station.location Yearly weather summary</title>
+    <link rel="stylesheet" type="text/css" href="weewx.css"/>
+    <link rel="icon" type="image/png" href="favicon.ico" />
+    <script type="text/javascript">
+      function openURL(urlname)
+      {
+        window.location=urlname;
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="container">
+
+#include "header.inc"
+
+      <div id="stats_group">
+
+        <div class="stats">
+          <div class="stats_header">
+            Календарний Рік
+          </div>
+
+          <table>
+            <tbody>
+              <tr>
+                <td class="stats_label">
+                  Найвижча Температура<br/>
+                  Найнижча Температура
+                </td>
+                <td class="stats_data">
+                  $year.outTemp.max від $year.outTemp.maxtime<br/>
+                  $year.outTemp.min від $year.outTemp.mintime
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                  Найвижчий Тепловий Індекс
+                </td>
+                <td class="stats_data">
+                  $year.heatindex.max від $year.heatindex.maxtime
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                    Найнижчий Температура Вітра
+                </td>
+                <td class="stats_data">
+                  $year.windchill.min від $year.windchill.mintime
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                  Найвижча Вологість<br/>
+                  Найнижча Вологість
+                </td>
+                <td class="stats_data">
+                  $year.outHumidity.max $year.outHumidity.maxtime<br/>
+                  $year.outHumidity.min $year.outHumidity.mintime
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                  Найвижча Точка Роси<br/>
+                  Найнижча Точка Роси
+                </td>
+                <td class="stats_data">
+                  $year.dewpoint.max $year.dewpoint.maxtime<br/>
+                  $year.dewpoint.min $year.dewpoint.mintime
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                  Найвижчий Тиск<br/>
+                  Найнижчий Тиск
+                </td>
+                <td class="stats_data">
+                  $year.barometer.max від $year.barometer.maxtime<br/>
+                  $year.barometer.min від $year.barometer.mintime
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                  Сумарна Кількість Опадів
+                </td>
+                <td class="stats_data">
+                  $year.rain.sum
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                  Найбільша Кількість Опадів
+                </td>
+                <td class="stats_data">
+                  $year.rainRate.max від $year.rainRate.maxtime
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                Найбільша Швиткість Вітру
+                </td>
+                <td class="stats_data">
+                  $year.wind.max до $year.wind.gustdir від $year.wind.maxtime
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                  Середній Вітер
+                </td>
+                <td class="stats_data">
+                  $year.wind.avg
+                </td>
+              </tr>
+
+              <tr>
+                <td class="stats_label">
+                  RMS Вітер
+                </td>
+                <td class="stats_data">
+                  $year.wind.rms
+                </td>
+              </tr>
+
+              <tr>
+                <td class="stats_label">
+                  Середній Напрям Швиидкості<br/>
+                  Середній Вектор Напряму
+                </td>
+                <td class="stats_data">
+                  $year.wind.vecavg<br/>
+                  $year.wind.vecdir
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                  Найвижча Внутрішня Температура<br/>
+                  Найнижча Внутрішня Температура
+                </td>
+                <td class="stats_data">
+                  $year.inTemp.max від $year.inTemp.maxtime<br/>
+                  $year.inTemp.min від $year.inTemp.mintime
+                </td>
+              </tr>
+              #if $year.UV.has_data
+              <tr>
+                <td class="stats_label">
+                  Найвижчий УФ-Індекс<br/>
+                  Найнижчий УФ-Індекс
+                </td>
+                <td class="stats_data">
+                  $year.UV.max від $year.UV.maxtime<br/>
+                  $year.UV.min від $year.UV.mintime
+                </td>
+              </tr>
+              #end if
+              #if $year.ET.has_data and $year.ET.sum.raw >0.0
+              <tr>
+                <td class="stats_label">
+                  Найвижчий ET<br/>
+                  Найнижчий ET
+                </td>
+                <td class="stats_data">
+                  $year.ET.max від $year.ET.maxtime<br/>
+                  $year.ET.min від $year.ET.mintime
+                </td>
+              </tr>
+              #end if
+              #if $year.radiation.has_data
+              <tr>
+                <td class="stats_label">
+                  Найвижче Випромінювання<br/>
+                  Найнижче Випромінювання
+                </td>
+                <td class="stats_data">
+                  $year.radiation.max від $year.radiation.maxtime<br/>
+                  $year.radiation.min від $year.radiation.mintime
+                </td>
+              </tr>
+              #end if
+            </tbody>
+          </table>
+        </div> <!-- End class "stats" -->
+
+        <p>&nbsp;</p>
+
+        <div class="stats">
+          <div class="stats_header">
+            Кількість Опадів за Рік (1-$station.rain_year_str start)
+          </div>
+
+          <table>
+            <tbody>
+              <tr>
+                <td class="stats_label">
+                  Загальна Кількість Опадів
+                </td>
+                <td class="stats_data">
+                  $rainyear.rain.sum
+                </td>
+              </tr>
+              <tr>
+                <td class="stats_label">
+                  Найбільша Кількість Опадів
+                </td>
+                <td class="stats_data">
+                  $rainyear.rainRate.max від $rainyear.rainRate.maxtime
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div> <!-- End class "stats" -->
+
+      </div> <!-- End class "stats_group" -->
+
+      <div id="content">
+
+        <div class="header">
+          <h3>Річна статистика і графіки</h3>
+        </div>
+        <div id="plots">
+          <img src="yeartempdew.png" alt="temperatures" />
+          <img src="yeartempchill.png" alt="heatchill" />
+          <img src="yearhumidity.png"  alt="outside humidity" />
+          <img src="yearhilow.png" alt="Daily highs and lows for the year" title="Daily highs and lows for the year"/>
+          <img src="yearrain.png" alt="rain" />
+          <img src="yearwind.png" alt="wind" />
+          <img src="yearbarometer.png" alt="barometer"/>
+          <img src="yearwinddir.png" alt="Hi Wind" />
+          <img src="yearinside.png" alt="Inside" />
+          <img src="yearwindvec.png" alt="Wind Vector" />
+          #if $year.radiation.has_data
+          <img src="yearradiation.png" alt="Radiation" />
+          #end if
+          #if $year.UV.has_data
+          <img src="yearuv.png" alt="UV Index" />
+          #end if
+          #if $year.rxCheckPercent.has_data
+          <img src="yearrx.png" alt="year rx percent"/>
+          #end if
+        </div>
+      </div> <!-- End id "content" -->
+
+      <div id="navbar">
+        <input type="button" value="   Тепер   " onclick="openURL('history.html')" />
+        <input type="button" value="   Тиждень   " onclick="openURL('week.html')" />
+        <input type="button" value="   Місяць    " onclick="openURL('month.html')" />
+        <input type="button" value="    Рік      " onclick="openURL('year.html')" />
+      </div>
+    </div> <!-- End id "container" -->
+
+#include "foo.inc"
+
+    ## Include the Google Analytics code if the user has supplied an ID:
+    #if $Extras.has_key('googleAnalyticsId')
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try{
+            var pageTracker = _gat._getTracker("$Extras.googleAnalyticsId");
+            pageTracker._trackPageview();
+        } catch(err) {}
+    </script>
+    #end if
+
+  </body>
+</html>
